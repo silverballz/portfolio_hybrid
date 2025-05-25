@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anurag Sharma | Portfolio</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #000000, #0f4c81);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const NavItem = ({ href, text }) => (
+      <a href={href} className="text-gray-300 hover:text-indigo-400 transition px-3 py-2 text-lg font-medium">
+        {text}
+      </a>
+    );
+
+    const Hero = () => (
+      <section id="home" className="flex flex-col md:flex-row items-center justify-center min-h-screen text-center md:text-left px-6 py-12">
+        <img
+          src="https://placehold.co/200x200/4F46E5/FFFFFF?text=Anurag"
+          className="w-48 h-48 rounded-full border-4 border-indigo-500 shadow-xl mb-6 md:mb-0 md:mr-12"
+        />
+        <div>
+          <h1 className="text-5xl font-extrabold text-white mb-4">
+            Hi, I’m <span className="text-indigo-400">Anurag Sharma</span>
+          </h1>
+          <p className="text-2xl text-gray-300 mb-6">Maths & Computing @ RGIPT | Minor @ IIT Mandi</p>
+          <p className="text-lg text-gray-400 max-w-xl">I’m passionate about Quantum Machine Learning, Fraud Detection, and UI/UX—building at the intersection of research and technology.</p>
+          <div className="mt-6 flex justify-center md:justify-start space-x-4">
+            <a href="#projects" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow transform hover:scale-105 transition">View Work</a>
+            <a href="#contact" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow transform hover:scale-105 transition">Contact</a>
+          </div>
+        </div>
+      </section>
+    );
+
+    const Section = ({ id, title, children }) => (
+      <section id={id} className="py-16 border-t border-gray-700 px-6 max-w-5xl mx-auto">
+        <h2 className="text-4xl font-bold text-center text-white mb-10">{title}</h2>
+        {children}
+      </section>
+    );
+
+    const Projects = () => (
+      <Section id="projects" title="Projects">
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-gray-800 p-6 rounded-xl shadow hover:shadow-2xl transition">
+            <h3 className="text-2xl text-indigo-400 font-semibold mb-2">Quantum Sentinel</h3>
+            <p className="text-gray-300 mb-4">A quantum-assisted credit card fraud detection system using Cirq and PennyLane.</p>
+            <a href="https://github.com/silverballz/Quantum-Sentinel" target="_blank" className="text-indigo-300 hover:underline">GitHub</a>
+          </div>
+          <div className="bg-gray-800 p-6 rounded-xl shadow hover:shadow-2xl transition">
+            <h3 className="text-2xl text-indigo-400 font-semibold mb-2">Orion ML Pipeline</h3>
+            <p className="text-gray-300 mb-4">Built a high-performance ML pipeline for NASA asteroid classification using XGBoost and QML.</p>
+            <a href="https://github.com/silverballz" target="_blank" className="text-indigo-300 hover:underline">GitHub</a>
+          </div>
+        </div>
+      </Section>
+    );
+
+    const Achievements = () => (
+      <Section id="achievements" title="Achievements">
+        <ul className="text-gray-300 space-y-4 list-disc list-inside">
+          <li>🏆 Winner – Hackmatrix 2025, IIT Patna (Team CORBETT)</li>
+          <li>🥈 Runner-up – Yuri’s Night 2025 (IIT BHU, Team Orion)</li>
+          <li>📜 Certificate of Distinction – CeNSE Winter School, IISc</li>
+          <li>🏅 Winner – IEEE RGIPT Data Viz (Kaleshikodes)</li>
+          <li>🥉 2nd Runner-up – TechnoMUN, Urjotsav’24</li>
+        </ul>
+      </Section>
+    );
+
+    const TechStack = () => (
+      <Section id="tech" title="Tech Stack">
+        <div className="flex flex-wrap justify-center gap-4 text-sm">
+          {["Python", "Streamlit", "Dash", "SQL", "NoSQL", "Cirq", "PennyLane", "QML", "UI/UX"].map(tech => (
+            <span key={tech} className="bg-gray-700 text-gray-200 px-4 py-2 rounded-full">{tech}</span>
+          ))}
+        </div>
+      </Section>
+    );
+
+    const Contact = () => (
+      <Section id="contact" title="Contact">
+        <div className="text-center text-gray-300 space-y-4">
+          <p>📧 Email: <a href="mailto:anurag.mnc26@rgipt.ac.in" className="text-indigo-400 hover:underline">anurag.mnc26@rgipt.ac.in</a></p>
+          <p>🔗 GitHub: <a href="https://github.com/silverballz" className="text-indigo-400 hover:underline" target="_blank">silverballz</a></p>
+          <p>🔗 LinkedIn: <a href="https://linkedin.com/in/anurag-mnc" className="text-indigo-400 hover:underline" target="_blank">anurag-mnc</a></p>
+        </div>
+      </Section>
+    );
+
+    const App = () => (
+      <div className="min-h-screen text-white">
+        <nav className="bg-gray-900 p-4 fixed w-full top-0 z-50 shadow">
+          <div className="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="#home" className="text-xl font-bold text-indigo-400">Anurag Sharma</a>
+            <div className="space-x-4 hidden md:flex">
+              <NavItem href="#projects" text="Projects" />
+              <NavItem href="#achievements" text="Achievements" />
+              <NavItem href="#tech" text="Tech Stack" />
+              <NavItem href="#contact" text="Contact" />
+            </div>
+          </div>
+        </nav>
+        <main className="pt-20">
+          <Hero />
+          <Projects />
+          <Achievements />
+          <TechStack />
+          <Contact />
+        </main>
+        <footer className="text-center py-6 text-sm text-gray-400 bg-gray-900 mt-12">
+          &copy; {new Date().getFullYear()} Anurag Sharma. Built with ❤️ in React + Tailwind.
+        </footer>
+      </div>
+    );
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>
