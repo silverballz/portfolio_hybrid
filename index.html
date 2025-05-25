@@ -2,20 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Anurag Sharma | Portfolio</title>
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom right, #000000, #0f4c81);
+      background: linear-gradient(to bottom right, #000000, #0b3e36);
+      color: #ffffff;
+    }
+    .tiffany {
+      color: #81d8d0;
+    }
+    .bg-tiffany {
+      background-color: #81d8d0;
+    }
+    .border-tiffany {
+      border-color: #81d8d0;
     }
   </style>
 </head>
@@ -23,115 +31,107 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const NavItem = ({ href, text }) => (
-      <a href={href} className="text-gray-300 hover:text-indigo-400 transition px-3 py-2 text-lg font-medium">
-        {text}
-      </a>
+    const { useEffect, useState } = React;
+
+    const Typewriter = ({ text, speed = 75 }) => {
+      const [displayed, setDisplayed] = useState("");
+      useEffect(() => {
+        let i = 0;
+        const interval = setInterval(() => {
+          setDisplayed(text.slice(0, i++));
+          if (i > text.length) clearInterval(interval);
+        }, speed);
+        return () => clearInterval(interval);
+      }, [text]);
+      return <h1 className="text-4xl md:text-5xl font-bold tiffany">{displayed}</h1>;
+    };
+
+    const Card = ({ title, content, icon }) => (
+      <div className="bg-black border border-gray-700 rounded-xl shadow-lg p-6 hover:shadow-2xl transition">
+        <h3 className="text-xl font-semibold tiffany mb-2">{icon} {title}</h3>
+        <p className="text-white text-sm whitespace-pre-wrap">{content}</p>
+      </div>
     );
 
-    const Hero = () => (
-      <section id="home" className="flex flex-col md:flex-row items-center justify-center min-h-screen text-center md:text-left px-6 py-12">
-        <img
-          src="https://placehold.co/200x200/4F46E5/FFFFFF?text=Anurag"
-          className="w-48 h-48 rounded-full border-4 border-indigo-500 shadow-xl mb-6 md:mb-0 md:mr-12"
-        />
-        <div>
-          <h1 className="text-5xl font-extrabold text-white mb-4">
-            Hi, I’m <span className="text-indigo-400">Anurag Sharma</span>
-          </h1>
-          <p className="text-2xl text-gray-300 mb-6">Maths & Computing @ RGIPT | Minor @ IIT Mandi</p>
-          <p className="text-lg text-gray-400 max-w-xl">I’m passionate about Quantum Machine Learning, Fraud Detection, and UI/UX—building at the intersection of research and technology.</p>
-          <div className="mt-6 flex justify-center md:justify-start space-x-4">
-            <a href="#projects" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow transform hover:scale-105 transition">View Work</a>
-            <a href="#contact" className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow transform hover:scale-105 transition">Contact</a>
-          </div>
-        </div>
-      </section>
-    );
-
-    const Section = ({ id, title, children }) => (
-      <section id={id} className="py-16 border-t border-gray-700 px-6 max-w-5xl mx-auto">
-        <h2 className="text-4xl font-bold text-center text-white mb-10">{title}</h2>
+    const Section = ({ title, children }) => (
+      <section className="max-w-6xl mx-auto py-12 px-4 border-t border-gray-700">
+        <h2 className="text-3xl font-bold text-white text-center mb-10">{title}</h2>
         {children}
       </section>
     );
 
-    const Projects = () => (
-      <Section id="projects" title="Projects">
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-gray-800 p-6 rounded-xl shadow hover:shadow-2xl transition">
-            <h3 className="text-2xl text-indigo-400 font-semibold mb-2">Quantum Sentinel</h3>
-            <p className="text-gray-300 mb-4">A quantum-assisted credit card fraud detection system using Cirq and PennyLane.</p>
-            <a href="https://github.com/silverballz/Quantum-Sentinel" target="_blank" className="text-indigo-300 hover:underline">GitHub</a>
-          </div>
-          <div className="bg-gray-800 p-6 rounded-xl shadow hover:shadow-2xl transition">
-            <h3 className="text-2xl text-indigo-400 font-semibold mb-2">Orion ML Pipeline</h3>
-            <p className="text-gray-300 mb-4">Built a high-performance ML pipeline for NASA asteroid classification using XGBoost and QML.</p>
-            <a href="https://github.com/silverballz" target="_blank" className="text-indigo-300 hover:underline">GitHub</a>
-          </div>
-        </div>
-      </Section>
-    );
-
-    const Achievements = () => (
-      <Section id="achievements" title="Achievements">
-        <ul className="text-gray-300 space-y-4 list-disc list-inside">
-          <li>🏆 Winner – Hackmatrix 2025, IIT Patna (Team CORBETT)</li>
-          <li>🥈 Runner-up – Yuri’s Night 2025 (IIT BHU, Team Orion)</li>
-          <li>📜 Certificate of Distinction – CeNSE Winter School, IISc</li>
-          <li>🏅 Winner – IEEE RGIPT Data Viz (Kaleshikodes)</li>
-          <li>🥉 2nd Runner-up – TechnoMUN, Urjotsav’24</li>
-        </ul>
-      </Section>
-    );
-
-    const TechStack = () => (
-      <Section id="tech" title="Tech Stack">
-        <div className="flex flex-wrap justify-center gap-4 text-sm">
-          {["Python", "Streamlit", "Dash", "SQL", "NoSQL", "Cirq", "PennyLane", "QML", "UI/UX"].map(tech => (
-            <span key={tech} className="bg-gray-700 text-gray-200 px-4 py-2 rounded-full">{tech}</span>
-          ))}
-        </div>
-      </Section>
-    );
-
-    const Contact = () => (
-      <Section id="contact" title="Contact">
-        <div className="text-center text-gray-300 space-y-4">
-          <p>📧 Email: <a href="mailto:anurag.mnc26@rgipt.ac.in" className="text-indigo-400 hover:underline">anurag.mnc26@rgipt.ac.in</a></p>
-          <p>🔗 GitHub: <a href="https://github.com/silverballz" className="text-indigo-400 hover:underline" target="_blank">silverballz</a></p>
-          <p>🔗 LinkedIn: <a href="https://linkedin.com/in/anurag-mnc" className="text-indigo-400 hover:underline" target="_blank">anurag-mnc</a></p>
-        </div>
-      </Section>
-    );
-
     const App = () => (
-      <div className="min-h-screen text-white">
-        <nav className="bg-gray-900 p-4 fixed w-full top-0 z-50 shadow">
-          <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="#home" className="text-xl font-bold text-indigo-400">Anurag Sharma</a>
-            <div className="space-x-4 hidden md:flex">
-              <NavItem href="#projects" text="Projects" />
-              <NavItem href="#achievements" text="Achievements" />
-              <NavItem href="#tech" text="Tech Stack" />
-              <NavItem href="#contact" text="Contact" />
-            </div>
+      <div className="min-h-screen">
+        <header className="text-center py-24 px-6">
+          <img
+            src="https://media.licdn.com/dms/image/v2/D5603AQEd8ROWfyNTIg/profile-displayphoto-shrink_400_400/B56ZbzAcYiGsAg-/0/1747833703217?e=1753920000&v=beta&t=Kijh60sTuILVuJfUa68HbjNpbgd8DwB5lk8y08TdOZY"
+            alt="Anurag Sharma"
+            className="w-40 h-40 rounded-full mx-auto border-4 border-tiffany shadow-lg mb-6 object-cover"
+          />
+          <p className="text-xl text-gray-300 mb-4">👋 Hi there, I'm</p>
+          <Typewriter text="Anurag Sharma" />
+          <p className="mt-4 text-gray-400 text-lg">"Code is a canvas. I build with math, machine learning, and quantum logic."</p>
+        </header>
+
+        <Section title="🎓 Education">
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card title="B.Tech in Mathematics & Computing" content="🧮 RGIPT" />
+            <Card title="Minor in Computer Science & Engineering" content="💻 IIT Mandi" />
           </div>
-        </nav>
-        <main className="pt-20">
-          <Hero />
-          <Projects />
-          <Achievements />
-          <TechStack />
-          <Contact />
-        </main>
-        <footer className="text-center py-6 text-sm text-gray-400 bg-gray-900 mt-12">
-          &copy; {new Date().getFullYear()} Anurag Sharma. Built with ❤️ in React + Tailwind.
+        </Section>
+
+        <Section title="⌚️ Experience">
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card title="AI 4 Agritech Intern – Annam.AI" content="🧠 CoE @ IIT Ropar\n🤖 Built AI/ML pipelines in agritech & edtech with open-source deployments." />
+            <Card title="AI Developer Intern – Viswam.AI" content="🧪 Swecha Telangana × IIIT Hyderabad\n🌱 Applied research and tools for real-world impact across sectors." />
+          </div>
+        </Section>
+
+        <Section title="🚀 Featured Projects">
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card title="⚛️ Quantum Sentinel" content="Quantum-assisted fraud detection with PennyLane + Cirq + Streamlit" />
+            <Card title="⏱️ ChronoQNN" content="Time-evolved Quantum Neural Networks for sequence modeling" />
+            <Card title="🎮 Prisoner's Dilemma Simulator" content="Game theory simulator exploring iterated strategic interactions" />
+            <Card title="🔗 More on GitHub →" content="https://github.com/silverballz" />
+          </div>
+        </Section>
+
+        <Section title="🏆 Achievements">
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card title="🥈 Runner-up – Yuri Night 2025 (IIT BHU)" content="🪐 Classifier for real NASA asteroid data. 1st-year team in top 3." />
+            <Card title="🥇 Winner – IEEE Data Viz Challenge (RGIPT)" content="📈 Visual storytelling dashboard built from scratch. 100+ participants." />
+            <Card title="🧠 Top 5% – CeNSE Winter School, IISc Bengaluru" content="⚡ Recognized for excellence in semiconductor technologies." />
+            <Card title="🧑‍💻 The Newbie Award – Hackmatrix 2025 (IIT Patna)" content="🚀 Built AI models at the national offline finals as 1st-year finalist." />
+          </div>
+        </Section>
+
+        <Section title="🛠️ Technologies & Tools">
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card title="🔹 Languages & Frameworks" content="Python\nC/C++\nSQL\nFastAPI" />
+            <Card title="🔹 AI & Quantum Stack" content="Scikit-learn\nPyTorch\nPennyLane\nCirq" />
+            <Card title="🔹 Visualization & UI" content="Streamlit\nMatplotlib\nUI/UX" />
+          </div>
+        </Section>
+
+        <Section title="🤝 Let's Collaborate">
+          <p className="text-center text-gray-300 mb-6">💬 Always open to:</p>
+          <ul className="text-center text-gray-300 space-y-2">
+            <li>🧪 Research projects in AI or QML</li>
+            <li>🌍 Open-source collaborations</li>
+            <li>🚀 Hackathons or mentorship circles</li>
+          </ul>
+          <p className="text-center tiffany mt-6">
+            📧 Reach out via <a href="mailto:anurag.mnc26@rgipt.ac.in" className="underline">Email</a> or connect on <a href="https://linkedin.com/in/anurag-mnc" target="_blank" className="underline">LinkedIn</a>
+          </p>
+        </Section>
+
+        <footer className="text-center py-6 text-sm text-gray-400 border-t border-gray-700">
+          &copy; {new Date().getFullYear()} Anurag Sharma. Built with React + Tailwind.
         </footer>
       </div>
     );
 
-    ReactDOM.render(<App />, document.getElementById("root"));
+    ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
