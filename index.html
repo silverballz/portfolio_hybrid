@@ -14,35 +14,55 @@
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #000000 70%, #00BFFF 100%);
-      color: #ffffff;
       min-height: 100vh;
+      transition: background 0.5s, color 0.5s;
     }
-    .tiffany {
-      color: #00BFFF;
-    }
-    .bg-tiffany {
-      background-color: #00BFFF;
-    }
-    .border-tiffany {
-      border-color: #00BFFF;
-    }
+    .tiffany { color: #00BFFF; }
+    .bg-tiffany { background-color: #00BFFF; }
+    .border-tiffany { border-color: #00BFFF; }
+
     .glass-effect {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255,255,255,0.2);
     }
     .nav-item:hover {
-      background: rgba(0, 191, 255, 0.2);
+      background: rgba(0,191,255,0.2);
       transform: translateY(-2px);
       transition: all 0.3s ease;
     }
+    .dark body {
+      background: #1f2937;
+      color: #e5e7eb;
+    }
+    .dark .tiffany { color: #7dd3fc; }
+    .dark .bg-tiffany { background-color: #7dd3fc; }
+    .dark .border-tiffany { border-color: #7dd3fc; }
   </style>
 </head>
-<body>
+<body class="light">
   <div id="root"></div>
+
   <script type="text/babel">
     const { useEffect, useState } = React;
+
+    // Theme context
+    const ThemeToggle = () => {
+      const [mode, setMode] = useState(localStorage.getItem('theme') || 'light');
+      useEffect(() => {
+        document.body.className = mode;
+        localStorage.setItem('theme', mode);
+      }, [mode]);
+      return (
+        <button
+          onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
+          className="p-2 rounded-full bg-tiffany text-white fixed top-6 right-6 shadow-lg hover:opacity-90 transition"
+          title="Toggle light/dark mode"
+        >
+          {mode === 'light' ? '🌙' : '☀️'}
+        </button>
+      );
+    };
 
     const Navbar = () => {
       const [isScrolled, setIsScrolled] = useState(false);
@@ -51,9 +71,7 @@
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
       }, []);
-
       const navItems = ["Home", "Education", "Experience", "Projects", "Achievements", "Contact"].map(name => ({ name, href: `#${name.toLowerCase()}` }));
-
       return (
         <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass-effect shadow-lg' : 'bg-transparent'}`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,7 +79,7 @@
               <a href="#home" className="text-2xl font-bold tiffany">AS</a>
               <div className="hidden md:block ml-10 space-x-4">
                 {navItems.map(({ name, href }) => (
-                  <a key={name} href={href} className="nav-item px-3 py-2 rounded-md text-sm font-medium text-white hover:text-tiffany">{name}</a>
+                  <a key={name} href={href} className="nav-item px-3 py-2 rounded-md text-sm font-medium">{name}</a>
                 ))}
               </div>
             </div>
@@ -92,7 +110,7 @@
 
     const Section = ({ title, children, id }) => (
       <section id={id} className="max-w-6xl mx-auto py-16 px-4">
-        <h2 className="text-4xl font-bold text-white text-center mb-12 relative">
+        <h2 className="text-4xl font-bold text-center mb-12 relative">
           {title}
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-tiffany mt-4"></div>
         </h2>
@@ -101,19 +119,20 @@
     );
 
     const App = () => (
-      <div className="min-h-screen">
+      <div className="min-h-screen pb-16">
+        <ThemeToggle />
         <Navbar />
         <header id="home" className="text-center py-32 px-6 mt-16">
-          <div className="relative">
-            <img src="https://media.licdn.com/dms/image/D4D03AQGV3vGwKhNNJA/profile-displayphoto-shrink_400_400/0/1683914080612?e=1721260800&v=beta&t=Io1RBRXQHik5Twb1MAYFppfaZ_dkZ4mY8oMwrDWfgrE" alt="Anurag Sharma" className="w-48 h-48 rounded-full mx-auto border-4 border-tiffany shadow-2xl mb-8 object-cover hover:scale-110 transition-transform duration-300" />
+          <div className="relative inline-block">
+            <img src="https://media.licdn.com/dms/image/D4D03AQGV3vGwKhNNJA/profile-displayphoto-shrink_400_400/0/1683914080612?e=1721260800&v=beta&t=Io1RBRXQHik5Twb1MAYFppfaZ_dkZ4mY8oMwrDWfgrE" alt="Anurag Sharma" className="w-48 h-48 rounded-full border-4 border-tiffany shadow-2xl mb-4 object-cover hover:scale-110 transition" />
             <div className="absolute -top-4 -right-4 w-8 h-8 bg-tiffany rounded-full animate-pulse"></div>
           </div>
-          <p className="text-xl text-gray-200 mb-6 font-light">👋 Hi there, I'm</p>
+          <p className="text-xl mb-4 font-light">👋 Hi, I'm</p>
           <Typewriter text="Anurag Sharma" />
-          <p className="mt-6 text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">AI x Quantum x Geo | B.Tech @ RGIPT | Minor @ IIT Mandi | Research Intern @ Prodigal AI & IIT Ropar | Mentee @ sktime</p>
+          <p className="mt-6 text-lg max-w-2xl mx-auto leading-relaxed">AI x Quantum x Geo | B.Tech @ RGIPT | Minor @ IIT Mandi | Research Intern @ Prodigal AI & IIT Ropar | Mentee @ sktime</p>
           <div className="mt-8 flex justify-center space-x-4">
-            <a href="#contact" className="bg-tiffany text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-400">Get In Touch</a>
-            <a href="#projects" className="border-2 border-tiffany text-tiffany px-6 py-3 rounded-full font-semibold hover:bg-tiffany hover:text-white">View Projects</a>
+            <a href="/Anurag_Sharma_CV.pdf" download className="bg-tiffany text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-400 transition">📄 Download CV</a>
+            <a href="#projects" className="border-2 border-tiffany text-tiffany px-6 py-3 rounded-full font-semibold hover:bg-tiffany hover:text-white transition">View Projects</a>
           </div>
         </header>
 
@@ -126,50 +145,54 @@
 
         <Section title="⌚️ Experience" id="experience">
           <div className="grid md:grid-cols-2 gap-8">
-            <Card title="AI Intern" content="Annam.AI @ IIT Ropar
-- Super-resolution model for NDVI imagery
-- Flood damage assessment using EDSR, RCAN" />
-            <Card title="AI Research Intern" content="Prodigal AI
-- Building Small Language Models (SLMs)
-- Research + Infra optimization for LLMs" />
-            <Card title="Mentee" content="sktime, German Center for Open Source AI
-- Forecasting tutorials, augmentations, bug fixes" />
+            <Card title="AI Intern" content={`Annam.AI @ IIT Ropar
+- Trained EDSR & RCAN for Sentinel-2 & PlanetScope NDVI super‑resolution
+- Built ΔNDVI-based masks for pixel‑wise crop & flood damage mapping
+- Developed end‑to‑end flood assessment pipeline (Muzaffarpur region)`} />
+            <Card title="AI Research Intern" content={`Prodigal AI
+- Trained Small Language Models (SLMs) for low-resource tasks
+- Designed distillation & RAG workflows to streamline inference
+- Co-created internal curriculum for SLM training workflows`} />
+            <Card title="Mentee" content={`sktime (German Center for Open Source AI)
+- Fixed bugs and added augmenters (WhiteNoise, TimeWarp)
+- Authored forecasting tutorials, tests & documentation
+- Engaged in open-source time-series ML community`} />
           </div>
         </Section>
 
         <Section title="🚀 Featured Projects" id="projects">
           <div className="grid md:grid-cols-2 gap-8">
-            <Card title="Quantum Sentinel" content="Quantum-assisted fraud detection with PennyLane + Cirq" />
-            <Card title="Orion" content="Asteroid hazard classifier using NASA data and XGBoost" />
-            <Card title="Fire Sentinel" content="Forest fire simulation using U-Net + Cellular Automata + Streamlit" />
-            <Card title="YouTube Summarizer" content="Multimodal video summarizer using Whisper + scene detection" />
+            <Card title="Quantum Sentinel" content="Quantum-assisted fraud detection using Cirq + PennyLane. Benchmarking QSVM vs classical SVM on real fraud dataset." />
+            <Card title="Orion" content="Asteroid hazard classifier: XGBoost model trained on NASA NEO data, visualizing orbital‑risk clusters." />
+            <Card title="Fire Sentinel" content="Forest fire simulation via U-Net + Cellular Automata. Integrated ERA5, VIIRS, LULC & DEM in Streamlit dashboard." />
+            <Card title="Flood Damage Assessment" content="UNet segmentation trained on ΔNDVI maps (Sentinel‑2 + PlanetScope). EDSR super‑resolution enhances pixel fidelity." />
           </div>
         </Section>
 
         <Section title="🏆 Achievements" id="achievements">
           <div className="grid md:grid-cols-2 gap-8">
             <Card title="Winner – NJACK Hackmatrix 2025 (IIT Patna)" content="Track Winner (Best Innovation + Newbie)" />
-            <Card title="Runner-up – Yuri Night 2025 (IIT BHU)" content="Planet Hunt ML Challenge – NASA asteroid classification" />
-            <Card title="Winner – IEEE RGIPT Data Viz Challenge" content="Top team out of 100+ participants with custom dashboard" />
-            <Card title="Top 5% – CeNSE Winter School @ IISc" content="Semiconductor Tech (2024)" />
+            <Card title="Runner‑up – Yuri Night 2025 (IIT BHU)" content="Planet Hunt ML Challenge – NASA asteroid classification" />
+            <Card title="Winner – IEEE RGIPT Data Viz Challenge" content="Top team among 100+ with custom dynamic dashboard" />
+            <Card title="Top 5% – CeNSE Winter School @ IISc" content="Semiconductor Technology (2024)" />
           </div>
         </Section>
 
-        <Section title="🛠️ Technologies & Tools" id="technologies">
+        <Section title="🛠️ Tech & Tools" id="technologies">
           <div className="grid md:grid-cols-3 gap-8">
             <Card title="Languages" content="Python, C/C++, Rust, SQL, MATLAB" />
-            <Card title="AI/Quantum" content="PyTorch, TensorFlow, scikit-learn, Cirq, PennyLane, Qiskit" />
+            <Card title="AI/Quantum" content="PyTorch, TensorFlow, scikit‑learn, Cirq, PennyLane, Qiskit" />
             <Card title="Infra/Tools" content="Git, VS Code, Docker, Airflow, Colab, Linux, FastAPI" />
           </div>
         </Section>
 
         <Section title="🤝 Let's Collaborate" id="contact">
           <div className="text-center">
-            <p className="text-gray-200 mb-8 text-lg">💬 Always open to:</p>
+            <p className="mb-8 text-lg">💬 Always open to:</p>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <Card title="Research" content="AI / Quantum ML research collaborations" />
               <Card title="Open Source" content="Contributing to Python/ML/Geo communities" />
-              <Card title="Hackathons" content="Competitive + social good projects" />
+              <Card title="Hackathons" content="Competitive + social impact projects" />
             </div>
             <div className="flex justify-center space-x-6">
               <a href="mailto:24mc3008@rgipt.ac.in" className="bg-tiffany text-white px-8 py-3 rounded-full font-semibold">📧 Email Me</a>
@@ -187,7 +210,7 @@
       </div>
     );
 
-    ReactDOM.render(<App />, document.getElementById('root'));
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
 </html>
