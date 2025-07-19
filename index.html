@@ -14,73 +14,87 @@
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #000000 70%, #00BFFF 100%);
+      color: #ffffff;
       min-height: 100vh;
-      transition: background 0.5s, color 0.5s;
     }
-    .tiffany { color: #00BFFF; }
-    .bg-tiffany { background-color: #00BFFF; }
-    .border-tiffany { border-color: #00BFFF; }
-
+    .tiffany {
+      color: #00BFFF;
+    }
+    .bg-tiffany {
+      background-color: #00BFFF;
+    }
+    .border-tiffany {
+      border-color: #00BFFF;
+    }
     .glass-effect {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .nav-item:hover {
-      background: rgba(0,191,255,0.2);
+      background: rgba(0, 191, 255, 0.2);
       transform: translateY(-2px);
       transition: all 0.3s ease;
     }
-    .dark body {
-      background: #1f2937;
-      color: #e5e7eb;
-    }
-    .dark .tiffany { color: #7dd3fc; }
-    .dark .bg-tiffany { background-color: #7dd3fc; }
-    .dark .border-tiffany { border-color: #7dd3fc; }
   </style>
 </head>
-<body class="light">
+<body>
   <div id="root"></div>
 
   <script type="text/babel">
     const { useEffect, useState } = React;
 
-    // Theme context
-    const ThemeToggle = () => {
-      const [mode, setMode] = useState(localStorage.getItem('theme') || 'light');
-      useEffect(() => {
-        document.body.className = mode;
-        localStorage.setItem('theme', mode);
-      }, [mode]);
-      return (
-        <button
-          onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
-          className="p-2 rounded-full bg-tiffany text-white fixed top-6 right-6 shadow-lg hover:opacity-90 transition"
-          title="Toggle light/dark mode"
-        >
-          {mode === 'light' ? '🌙' : '☀️'}
-        </button>
-      );
-    };
-
     const Navbar = () => {
       const [isScrolled, setIsScrolled] = useState(false);
+
       useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 50);
+        const handleScroll = () => {
+          setIsScrolled(window.scrollY > 50);
+        };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
       }, []);
-      const navItems = ["Home", "Education", "Experience", "Projects", "Achievements", "Contact"].map(name => ({ name, href: `#${name.toLowerCase()}` }));
+
+      const navItems = [
+        { name: 'Home', href: '#home' },
+        { name: 'Education', href: '#education' },
+        { name: 'Experience', href: '#experience' },
+        { name: 'Projects', href: '#projects' },
+        { name: 'Achievements', href: '#achievements' },
+        { name: 'Contact', href: '#contact' }
+      ];
+
       return (
-        <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass-effect shadow-lg' : 'bg-transparent'}`}>
+        <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          isScrolled ? 'glass-effect shadow-lg' : 'bg-transparent'
+        }`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <a href="#home" className="text-2xl font-bold tiffany">AS</a>
-              <div className="hidden md:block ml-10 space-x-4">
-                {navItems.map(({ name, href }) => (
-                  <a key={name} href={href} className="nav-item px-3 py-2 rounded-md text-sm font-medium">{name}</a>
-                ))}
+              <div className="flex-shrink-0">
+                <a href="#home" className="text-2xl font-bold tiffany">
+                  AS
+                </a>
+              </div>
+              <div className="hidden md:block">
+                <div className="ml-10 flex items-baseline space-x-4">
+                  {navItems.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className="nav-item px-3 py-2 rounded-md text-sm font-medium text-white hover:text-tiffany transition-all duration-300"
+                    >
+                      {item.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <div className="md:hidden">
+                <button className="text-white hover:text-tiffany">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -101,16 +115,16 @@
       return <h1 className="text-4xl md:text-6xl font-bold tiffany">{displayed}</h1>;
     };
 
-    const Card = ({ title, content }) => (
+    const Card = ({ title, content, icon }) => (
       <div className="glass-effect rounded-xl shadow-xl p-6 hover:shadow-2xl hover:scale-105 transition-all duration-300">
-        <h3 className="text-xl font-semibold tiffany mb-3">{title}</h3>
+        <h3 className="text-xl font-semibold tiffany mb-3">{icon} {title}</h3>
         <p className="text-gray-100 text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
       </div>
     );
 
     const Section = ({ title, children, id }) => (
       <section id={id} className="max-w-6xl mx-auto py-16 px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 relative">
+        <h2 className="text-4xl font-bold text-white text-center mb-12 relative">
           {title}
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-tiffany mt-4"></div>
         </h2>
@@ -119,84 +133,101 @@
     );
 
     const App = () => (
-      <div className="min-h-screen pb-16">
-        <ThemeToggle />
+      <div className="min-h-screen">
         <Navbar />
+        
         <header id="home" className="text-center py-32 px-6 mt-16">
-          <div className="relative inline-block">
-            <img src="https://media.licdn.com/dms/image/D4D03AQGV3vGwKhNNJA/profile-displayphoto-shrink_400_400/0/1683914080612?e=1721260800&v=beta&t=Io1RBRXQHik5Twb1MAYFppfaZ_dkZ4mY8oMwrDWfgrE" alt="Anurag Sharma" className="w-48 h-48 rounded-full border-4 border-tiffany shadow-2xl mb-4 object-cover hover:scale-110 transition" />
+          <div className="relative">
+            <img
+              src="https://media.licdn.com/dms/image/v2/D5603AQEd8ROWfyNTIg/profile-displayphoto-shrink_400_400/B56ZbzAcYiGsAg-/0/1747833703217?e=1753920000&v=beta&t=Kijh60sTuILVuJfUa68HbjNpbgd8DwB5lk8y08TdOZY"
+              alt="Anurag Sharma"
+              className="w-48 h-48 rounded-full mx-auto border-4 border-tiffany shadow-2xl mb-8 object-cover hover:scale-110 transition-transform duration-300"
+            />
             <div className="absolute -top-4 -right-4 w-8 h-8 bg-tiffany rounded-full animate-pulse"></div>
           </div>
-          <p className="text-xl mb-4 font-light">👋 Hi, I'm</p>
+          <p className="text-xl text-gray-200 mb-6 font-light">👋 Hi there, I'm</p>
           <Typewriter text="Anurag Sharma" />
-          <p className="mt-6 text-lg max-w-2xl mx-auto leading-relaxed">AI x Quantum x Geo | B.Tech @ RGIPT | Minor @ IIT Mandi | Research Intern @ Prodigal AI & IIT Ropar | Mentee @ sktime</p>
+          <p className="mt-6 text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
+            "Code is a canvas. I build with math, machine learning, and quantum logic."
+          </p>
           <div className="mt-8 flex justify-center space-x-4">
-            <a href="/Anurag_Sharma_CV.pdf" download className="bg-tiffany text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-400 transition">📄 Download CV</a>
-            <a href="#projects" className="border-2 border-tiffany text-tiffany px-6 py-3 rounded-full font-semibold hover:bg-tiffany hover:text-white transition">View Projects</a>
+            <a href="#contact" className="bg-tiffany text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-400 transition-colors duration-300">
+              Get In Touch
+            </a>
+            <a href="#projects" className="border-2 border-tiffany text-tiffany px-6 py-3 rounded-full font-semibold hover:bg-tiffany hover:text-white transition-all duration-300">
+              View Projects
+            </a>
           </div>
         </header>
 
         <Section title="🎓 Education" id="education">
           <div className="grid md:grid-cols-2 gap-8">
-            <Card title="B.Tech in Mathematics & Computing" content="Rajiv Gandhi Institute of Petroleum Technology (2024–28)" />
-            <Card title="Minor in Computer Science & Engineering" content="Indian Institute of Technology Mandi (2024–25)" />
+            <Card title="B.Tech in Mathematics & Computing" content="Rajiv Gandhi Institute of Petroleum Technology" />
+            <Card title="Minor in Computer Science & Engineering" content="Indian Institute of Technology Mandi" />
           </div>
         </Section>
 
         <Section title="⌚️ Experience" id="experience">
           <div className="grid md:grid-cols-2 gap-8">
-            <Card title="AI Intern" content={`Annam.AI @ IIT Ropar
-- Trained EDSR & RCAN for Sentinel-2 & PlanetScope NDVI super‑resolution
-- Built ΔNDVI-based masks for pixel‑wise crop & flood damage mapping
-- Developed end‑to‑end flood assessment pipeline (Muzaffarpur region)`} />
-            <Card title="AI Research Intern" content={`Prodigal AI
-- Trained Small Language Models (SLMs) for low-resource tasks
-- Designed distillation & RAG workflows to streamline inference
-- Co-created internal curriculum for SLM training workflows`} />
-            <Card title="Mentee" content={`sktime (German Center for Open Source AI)
-- Fixed bugs and added augmenters (WhiteNoise, TimeWarp)
-- Authored forecasting tutorials, tests & documentation
-- Engaged in open-source time-series ML community`} />
+            <Card title="AI Intern" content="🧠 Annam.AI @ IIT Ropar" />
+            <Card title="AI Research Intern" content="🧪 Prodigal AI" />
           </div>
         </Section>
 
         <Section title="🚀 Featured Projects" id="projects">
           <div className="grid md:grid-cols-2 gap-8">
-            <Card title="Quantum Sentinel" content="Quantum-assisted fraud detection using Cirq + PennyLane. Benchmarking QSVM vs classical SVM on real fraud dataset." />
-            <Card title="Orion" content="Asteroid hazard classifier: XGBoost model trained on NASA NEO data, visualizing orbital‑risk clusters." />
-            <Card title="Fire Sentinel" content="Forest fire simulation via U-Net + Cellular Automata. Integrated ERA5, VIIRS, LULC & DEM in Streamlit dashboard." />
-            <Card title="Flood Damage Assessment" content="UNet segmentation trained on ΔNDVI maps (Sentinel‑2 + PlanetScope). EDSR super‑resolution enhances pixel fidelity." />
+            <Card title="⚛️ Quantum Sentinel" content="Quantum-assisted fraud detection with PennyLane + Cirq" />
+            <Card title="⏱️ Orion" content="Asteroid Hazard Classification" />
+            <Card title="🔗 More on GitHub →" content="https://github.com/silverballz" />
           </div>
         </Section>
 
         <Section title="🏆 Achievements" id="achievements">
           <div className="grid md:grid-cols-2 gap-8">
-            <Card title="Winner – NJACK Hackmatrix 2025 (IIT Patna)" content="Track Winner (Best Innovation + Newbie)" />
-            <Card title="Runner‑up – Yuri Night 2025 (IIT BHU)" content="Planet Hunt ML Challenge – NASA asteroid classification" />
-            <Card title="Winner – IEEE RGIPT Data Viz Challenge" content="Top team among 100+ with custom dynamic dashboard" />
-            <Card title="Top 5% – CeNSE Winter School @ IISc" content="Semiconductor Technology (2024)" />
+            <Card title="🧑‍💻 The Newbie Award – NJACK Hackmatrix 2025 (IIT Patna)" content="🚀 Built QML model at offline finals as a 1st-year finalist." />
+            <Card title="🥈 Runner-up – Planet Hunt @ Yuri Night 2025 (IIT BHU Varanasi)" content="🪐 Classifier for real NASA asteroid data. Only 1st-year team in top 3." />
+            <Card title="🥇 Winner – IEEE Data Viz Challenge (RGIPT Jais)" content="📈 Visual storytelling dashboard built from scratch. 100+ participants." />
+            <Card title="🧠 Top 5% – CeNSE Winter School, IISc Bengaluru" content="⚡ Recognized for excellence in semiconductor technologies." />
           </div>
         </Section>
 
-        <Section title="🛠️ Tech & Tools" id="technologies">
+        <Section title="🛠️ Technologies & Tools" id="technologies">
           <div className="grid md:grid-cols-3 gap-8">
-            <Card title="Languages" content="Python, C/C++, Rust, SQL, MATLAB" />
-            <Card title="AI/Quantum" content="PyTorch, TensorFlow, scikit‑learn, Cirq, PennyLane, Qiskit" />
-            <Card title="Infra/Tools" content="Git, VS Code, Docker, Airflow, Colab, Linux, FastAPI" />
+            <Card title="🔹 Languages & Frameworks" content="Python, C/C++, SQL, FastAPI" />
+            <Card title="🔹 AI & Quantum Stack" content="Scikit-learn, TensorFlow, PyTorch, PennyLane, Cirq" />
+            <Card title="🔹 Visualization & UI" content="Streamlit, UI/UX" />
           </div>
         </Section>
 
         <Section title="🤝 Let's Collaborate" id="contact">
           <div className="text-center">
-            <p className="mb-8 text-lg">💬 Always open to:</p>
+            <p className="text-gray-200 mb-8 text-lg">💬 Always open to:</p>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <Card title="Research" content="AI / Quantum ML research collaborations" />
-              <Card title="Open Source" content="Contributing to Python/ML/Geo communities" />
-              <Card title="Hackathons" content="Competitive + social impact projects" />
+              <div className="glass-effect p-6 rounded-xl">
+                <div className="text-3xl mb-3">🧪</div>
+                <h3 className="font-semibold tiffany mb-2">Research Projects</h3>
+                <p className="text-gray-200 text-sm">AI or QML research collaborations</p>
+              </div>
+              <div className="glass-effect p-6 rounded-xl">
+                <div className="text-3xl mb-3">🌍</div>
+                <h3 className="font-semibold tiffany mb-2">Open Source</h3>
+                <p className="text-gray-200 text-sm">Contributing to meaningful projects</p>
+              </div>
+              <div className="glass-effect p-6 rounded-xl">
+                <div className="text-3xl mb-3">🚀</div>
+                <h3 className="font-semibold tiffany mb-2">Hackathons</h3>
+                <p className="text-gray-200 text-sm">Team competitions & mentorship</p>
+              </div>
             </div>
             <div className="flex justify-center space-x-6">
-              <a href="mailto:24mc3008@rgipt.ac.in" className="bg-tiffany text-white px-8 py-3 rounded-full font-semibold">📧 Email Me</a>
-              <a href="https://www.linkedin.com/in/anurag-sharma-362664240/" target="_blank" className="border-2 border-tiffany text-tiffany px-8 py-3 rounded-full font-semibold hover:bg-tiffany hover:text-white">💼 LinkedIn</a>
+              <a href="mailto:anurag.mnc26@rgipt.ac.in" className="bg-tiffany text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-400 transition-colors duration-300 flex items-center space-x-2">
+                <span>📧</span>
+                <span>Email Me</span>
+              </a>
+              <a href="https://linkedin.com/in/anurag-mnc" target="_blank" className="border-2 border-tiffany text-tiffany px-8 py-3 rounded-full font-semibold hover:bg-tiffany hover:text-white transition-all duration-300 flex items-center space-x-2">
+                <span>💼</span>
+                <span>LinkedIn</span>
+              </a>
             </div>
           </div>
         </Section>
@@ -210,6 +241,10 @@
       </div>
     );
 
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
