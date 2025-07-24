@@ -14,29 +14,129 @@
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #000000 70%, #00BFFF 100%);
-      color: #ffffff;
-      min-height: 100vh;
+      transition: background-color 0.5s, color 0.5s;
     }
-    .tiffany {
-      color: #00BFFF;
+    
+    /* Light Mode */
+    .light {
+      --bg-start: #f3f4f6;
+      --bg-end: #e5e7eb;
+      --text-main: #1e293b;
+      --text-secondary: #475569;
+      --accent: #4f46e5;
+      --card-bg-start: rgba(255, 255, 255, 0.7);
+      --card-bg-end: rgba(255, 255, 255, 0.4);
+      --card-border: rgba(0, 0, 0, 0.1);
+      --glass-bg: rgba(255, 255, 255, 0.5);
+      --glass-border: rgba(0, 0, 0, 0.1);
+      --grid-color: rgba(0, 0, 0, 0.05);
     }
-    .bg-tiffany {
-      background-color: #00BFFF;
+
+    /* Dark Mode */
+    .dark {
+      --bg-start: #0f172a;
+      --bg-end: #1e293b;
+      --text-main: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --accent: #818cf8;
+      --card-bg-start: rgba(255, 255, 255, 0.07);
+      --card-bg-end: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --grid-color: rgba(255, 255, 255, 0.05);
     }
-    .border-tiffany {
-      border-color: #00BFFF;
+    
+    body {
+      background-color: var(--bg-start);
+      background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(to right, var(--grid-color) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: var(--text-main);
     }
+
+    .accent-text {
+      color: var(--accent);
+    }
+    
+    .accent-border {
+       border-color: var(--accent);
+    }
+
     .glass-effect {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--glass-bg);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid var(--glass-border);
     }
+    
+    .card-gradient {
+      background-image: linear-gradient(135deg, var(--card-bg-start), var(--card-bg-end));
+      border: 1px solid var(--card-border);
+    }
+
     .nav-item:hover {
-      background: rgba(0, 191, 255, 0.2);
+      color: var(--accent);
       transform: translateY(-2px);
       transition: all 0.3s ease;
     }
+
+    .card-content ul {
+      list-style-position: inside;
+      padding-left: 0;
+    }
+    .card-content li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+    .card-content li::before {
+        content: "•";
+        color: var(--accent);
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+    .toggle-switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 28px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
   </style>
 </head>
 <body>
@@ -45,56 +145,48 @@
   <script type="text/babel">
     const { useEffect, useState } = React;
 
-    const Navbar = () => {
+    const ThemeToggle = ({ theme, toggleTheme }) => (
+      <label className="toggle-switch">
+        <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
+        <span className="slider"></span>
+      </label>
+    );
+
+    const Navbar = ({ theme, toggleTheme }) => {
       const [isScrolled, setIsScrolled] = useState(false);
 
       useEffect(() => {
-        const handleScroll = () => {
-          setIsScrolled(window.scrollY > 50);
-        };
+        const handleScroll = () => setIsScrolled(window.scrollY > 50);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
       }, []);
-
+      
       const navItems = [
         { name: 'Home', href: '#home' },
         { name: 'Education', href: '#education' },
         { name: 'Experience', href: '#experience' },
         { name: 'Projects', href: '#projects' },
         { name: 'Achievements', href: '#achievements' },
+        { name: 'Skills', href: '#skills' },
         { name: 'Contact', href: '#contact' }
       ];
 
       return (
-        <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'glass-effect shadow-lg' : 'bg-transparent'
-        }`}>
+        <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass-effect shadow-lg' : 'bg-transparent'}`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <div className="flex-shrink-0">
-                <a href="#home" className="text-2xl font-bold tiffany">
-                  AS
-                </a>
+              <a href="#home" className="text-2xl font-bold accent-text">AS</a>
+              <div className="hidden md:flex items-center space-x-4">
+                {navItems.map((item) => (
+                  <a key={item.name} href={item.href} className="nav-item px-3 py-2 rounded-md text-sm font-medium transition-all duration-300" style={{color: 'var(--text-main)'}}>
+                    {item.name}
+                  </a>
+                ))}
+                <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
               </div>
-              <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
-                  {navItems.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="nav-item px-3 py-2 rounded-md text-sm font-medium text-white hover:text-tiffany transition-all duration-300"
-                    >
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-              </div>
-              <div className="md:hidden">
-                <button className="text-white hover:text-tiffany">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </button>
+              <div className="md:hidden flex items-center">
+                <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+                {/* Mobile menu button can be added here */}
               </div>
             </div>
           </div>
@@ -102,150 +194,121 @@
       );
     };
 
-    const Typewriter = ({ text, speed = 75 }) => {
+    const Typewriter = ({ text, speed = 100 }) => {
       const [displayed, setDisplayed] = useState("");
       useEffect(() => {
         let i = 0;
         const interval = setInterval(() => {
-          setDisplayed(text.slice(0, i++));
-          if (i > text.length) clearInterval(interval);
+          setDisplayed(text.slice(0, ++i));
+          if (i === text.length) clearInterval(interval);
         }, speed);
         return () => clearInterval(interval);
-      }, [text]);
-      return <h1 className="text-4xl md:text-6xl font-bold tiffany">{displayed}</h1>;
+      }, [text, speed]);
+      return <h1 className="text-4xl md:text-6xl font-bold accent-text">{displayed}</h1>;
     };
 
     const Card = ({ title, content, icon }) => (
-      <div className="glass-effect rounded-xl shadow-xl p-6 hover:shadow-2xl hover:scale-105 transition-all duration-300">
-        <h3 className="text-xl font-semibold tiffany mb-3">{icon} {title}</h3>
-        <p className="text-gray-100 text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
+      <div className="card-gradient rounded-xl shadow-xl p-6 hover:shadow-2xl hover:scale-105 transition-all duration-300 h-full">
+        <h3 className="text-xl font-semibold accent-text mb-3">{icon} {title}</h3>
+        <div className="text-sm leading-relaxed card-content">{content}</div>
       </div>
     );
 
     const Section = ({ title, children, id }) => (
       <section id={id} className="max-w-6xl mx-auto py-16 px-4">
-        <h2 className="text-4xl font-bold text-white text-center mb-12 relative">
+        <h2 className="text-4xl font-bold text-center mb-12 relative" style={{color: 'var(--text-main)'}}>
           {title}
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-tiffany mt-4"></div>
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent mt-4"></div>
         </h2>
         {children}
       </section>
     );
 
-    const App = () => (
-      <div className="min-h-screen">
-        <Navbar />
-        
-        <header id="home" className="text-center py-32 px-6 mt-16">
-          <div className="relative">
-            <img
-              src="https://media.licdn.com/dms/image/v2/D5603AQEd8ROWfyNTIg/profile-displayphoto-shrink_400_400/B56ZbzAcYiGsAg-/0/1747833703217?e=1753920000&v=beta&t=Kijh60sTuILVuJfUa68HbjNpbgd8DwB5lk8y08TdOZY"
-              alt="Anurag Sharma"
-              className="w-48 h-48 rounded-full mx-auto border-4 border-tiffany shadow-2xl mb-8 object-cover hover:scale-110 transition-transform duration-300"
-            />
-            <div className="absolute -top-4 -right-4 w-8 h-8 bg-tiffany rounded-full animate-pulse"></div>
-          </div>
-          <p className="text-xl text-gray-200 mb-6 font-light">👋 Hi there, I'm</p>
-          <Typewriter text="Anurag Sharma" />
-          <p className="mt-6 text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-            "Code is a canvas. I build with math, machine learning, and quantum logic."
-          </p>
-          <div className="mt-8 flex justify-center space-x-4">
-            <a href="#contact" className="bg-tiffany text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-400 transition-colors duration-300">
-              Get In Touch
-            </a>
-            <a href="#projects" className="border-2 border-tiffany text-tiffany px-6 py-3 rounded-full font-semibold hover:bg-tiffany hover:text-white transition-all duration-300">
-              View Projects
-            </a>
-          </div>
-        </header>
+    const App = () => {
+      const [theme, setTheme] = useState('dark');
+      
+      useEffect(() => {
+        document.body.className = theme;
+      }, [theme]);
+      
+      const toggleTheme = () => {
+        setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+      };
 
-        <Section title="🎓 Education" id="education">
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card title="B.Tech in Mathematics & Computing" content="Rajiv Gandhi Institute of Petroleum Technology" />
-            <Card title="Minor in Computer Science & Engineering" content="Indian Institute of Technology Mandi" />
-          </div>
-        </Section>
+      return (
+        <div className="min-h-screen">
+          <Navbar theme={theme} toggleTheme={toggleTheme} />
+          
+          <header id="home" className="text-center min-h-screen flex flex-col justify-center items-center px-6">
+            <div className="relative">
+              <img
+                src="https://drive.google.com/uc?export=view&id=1fwBbJr-QuFFnMRTJT4hPgEH8iBGtpBhP"
+                alt="Anurag Sharma"
+                className="w-48 h-48 rounded-full mx-auto border-4 accent-border shadow-2xl mb-8 object-cover hover:scale-110 transition-transform duration-300"
+              />
+            </div>
+            <p className="text-xl mb-6 font-light" style={{color: 'var(--text-secondary)'}}>👋 Hi there, I'm</p>
+            <Typewriter text="Anurag Sharma" />
+            <p className="mt-6 text-lg max-w-2xl mx-auto leading-relaxed" style={{color: 'var(--text-secondary)'}}>
+              AI & Quantum Researcher | B.Tech @ RGIPT | CS Minor @ IIT Mandi
+            </p>
+          </header>
 
-        <Section title="⌚️ Experience" id="experience">
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card title="AI Intern" content="🧠 Annam.AI @ IIT Ropar" />
-            <Card title="AI Research Intern" content="🧪 Prodigal AI" />
-          </div>
-        </Section>
+          <Section title="Education" id="education">
+            <div className="grid md:grid-cols-2 gap-8">
+              <Card title="B.Tech in Mathematics & Computing" content={<ul><li>Rajiv Gandhi Institute of Petroleum Technology</li></ul>} />
+              <Card title="Minor in Computer Science & Advanced Technologies" content={<ul><li>Indian Institute of Technology Mandi</li></ul>} />
+            </div>
+          </Section>
 
-        <Section title="🚀 Featured Projects" id="projects">
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card title="⚛️ Quantum Sentinel" content="Quantum-assisted fraud detection with PennyLane + Cirq" />
-            <Card title="⏱️ Orion" content="Asteroid Hazard Classification" />
-            <Card title="🔗 More on GitHub →" content="https://github.com/silverballz" />
-          </div>
-        </Section>
+          <Section title="Experience" id="experience">
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card title="AI Intern @ Annam.AI" content={<ul><li>Internship at IIT Ropar (June-July 2025)</li><li>Built flood damage classification pipeline</li><li>Developed NDVI-based super-resolution models</li><li>Tech: PyTorch, FastAPI, Docker</li></ul>} />
+              <Card title="AI Research Intern @ Prodigal AI" content={<ul><li>Internship since July 2025</li><li>Research on SLMs, RAG, and multimodal learning</li><li>Focus on interpretability and agentic reasoning</li></ul>} />
+              <Card title="Mentee @ sktime" content={<ul><li>Open-source contributions since July 2025</li><li>Improved white noise augmentation for pandas input</li><li>Mentored by sktime maintainers</li></ul>} />
+            </div>
+          </Section>
 
-        <Section title="🏆 Achievements" id="achievements">
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card title="🧑‍💻 The Newbie Award – NJACK Hackmatrix 2025 (IIT Patna)" content="🚀 Built QML model at offline finals as a 1st-year finalist." />
-            <Card title="🥈 Runner-up – Planet Hunt @ Yuri Night 2025 (IIT BHU Varanasi)" content="🪐 Classifier for real NASA asteroid data. Only 1st-year team in top 3." />
-            <Card title="🥇 Winner – IEEE Data Viz Challenge (RGIPT Jais)" content="📈 Visual storytelling dashboard built from scratch. 100+ participants." />
-            <Card title="🧠 Top 5% – CeNSE Winter School, IISc Bengaluru" content="⚡ Recognized for excellence in semiconductor technologies." />
-          </div>
-        </Section>
+          <Section title="Featured Projects" id="projects">
+             <div className="grid md:grid-cols-3 gap-8">
+              <Card title="⚛️ Quantum Sentinel" content={<ul><li>Quantum-assisted fraud detection</li><li>Tech: PennyLane, Cirq, Streamlit</li><li>Status: Active</li></ul>} />
+              <Card title="⏱️ ChronoQNN" content={<ul><li>Quantum Neural Networks for time series</li><li>Tech: PyTorch, PennyLane</li><li>Status: Beta</li></ul>} />
+              <Card title="🔥 Fire Sentinel" content={<ul><li>Forest fire risk and spread simulation</li><li>Tech: U-Net, CA, ERA5, Streamlit</li><li>Status: Live</li></ul>} />
+            </div>
+          </Section>
 
-        <Section title="🛠️ Technologies & Tools" id="technologies">
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card title="🔹 Languages & Frameworks" content="Python, C/C++, SQL, FastAPI" />
-            <Card title="🔹 AI & Quantum Stack" content="Scikit-learn, TensorFlow, PyTorch, PennyLane, Cirq" />
-            <Card title="🔹 Visualization & UI" content="Streamlit, UI/UX" />
-          </div>
-        </Section>
+          <Section title="Achievements" id="achievements">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <Card title="🥇 Winner" content={<ul><li>IEEE Data Viz Challenge</li><li>Team Leader for visual AI storytelling</li></ul>} />
+                <Card title="🥈 Runner-up" content={<ul><li>Yuri Night 2025 @ IIT BHU</li><li>Team Leader for NASA asteroid classifier</li></ul>} />
+                <Card title="🏅 Top 5%" content={<ul><li>CeNSE Winter School @ IISc</li><li>Certificate of Distinction in semiconductor tech</li></ul>} />
+                <Card title="🧑‍💻 Best Newbie" content={<ul><li>Hackmatrix 2025 @ IIT Patna</li><li>1st year innovation award in finals</li></ul>} />
+            </div>
+          </Section>
+          
+          <Section title="Skills & Stack" id="skills">
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card title="Languages & Frameworks" content={<ul><li>Python</li><li>Rust</li><li>SQL</li><li>C++</li><li>FastAPI</li></ul>} />
+              <Card title="AI & Quantum Stack" content={<ul><li>PyTorch</li><li>TensorFlow</li><li>Scikit-learn</li><li>PennyLane</li><li>Hugging Face</li></ul>} />
+              <Card title="Data, Web & UI" content={<ul><li>Streamlit</li><li>Docker</li><li>PostgreSQL</li><li>Redis</li><li>Geospatial Tools</li></ul>} />
+            </div>
+          </Section>
 
-        <Section title="🤝 Let's Collaborate" id="contact">
-          <div className="text-center">
-            <p className="text-gray-200 mb-8 text-lg">💬 Always open to:</p>
-            <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="glass-effect p-6 rounded-xl">
-                <div className="text-3xl mb-3">🧪</div>
-                <h3 className="font-semibold tiffany mb-2">Research Projects</h3>
-                <p className="text-gray-200 text-sm">AI or QML research collaborations</p>
-              </div>
-              <div className="glass-effect p-6 rounded-xl">
-                <div className="text-3xl mb-3">🌍</div>
-                <h3 className="font-semibold tiffany mb-2">Open Source</h3>
-                <p className="text-gray-200 text-sm">Contributing to meaningful projects</p>
-              </div>
-              <div className="glass-effect p-6 rounded-xl">
-                <div className="text-3xl mb-3">🚀</div>
-                <h3 className="font-semibold tiffany mb-2">Hackathons</h3>
-                <p className="text-gray-200 text-sm">Team competitions & mentorship</p>
+          <Section title="Contact" id="contact">
+            <div className="text-center max-w-lg mx-auto">
+              <p className="mb-8 text-lg" style={{color: 'var(--text-secondary)'}}>I'm always open to collaborating on innovative projects. Let's connect!</p>
+              <div className="flex justify-center space-x-6">
+                <a href="mailto:anuragmessi5@gmail.com" className="text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform duration-300" style={{backgroundColor: 'var(--accent)'}}>Email Me</a>
+                <a href="https://www.linkedin.com/in/anurag-sharma-362664240/" target="_blank" className="border-2 accent-border px-8 py-3 rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-300" style={{color: 'var(--text-main)'}}>LinkedIn</a>
+                <a href="https://github.com/silverballz" target="_blank" className="border-2 accent-border px-8 py-3 rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-300" style={{color: 'var(--text-main)'}}>GitHub</a>
               </div>
             </div>
-            <div className="flex justify-center space-x-6">
-              <a href="mailto:anurag.mnc26@rgipt.ac.in" className="bg-tiffany text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-400 transition-colors duration-300 flex items-center space-x-2">
-                <span>📧</span>
-                <span>Email Me</span>
-              </a>
-              <a href="https://linkedin.com/in/anurag-mnc" target="_blank" className="border-2 border-tiffany text-tiffany px-8 py-3 rounded-full font-semibold hover:bg-tiffany hover:text-white transition-all duration-300 flex items-center space-x-2">
-                <span>💼</span>
-                <span>LinkedIn</span>
-              </a>
-            </div>
-          </div>
-        </Section>
-
-        <footer className="text-center py-8 text-sm text-gray-300 border-t border-gray-600 mt-16">
-          <div className="max-w-6xl mx-auto px-4">
-            <p>&copy; {new Date().getFullYear()} Anurag Sharma. Built with React + Tailwind CSS.</p>
-            <p className="mt-2 text-xs text-gray-400">Crafted with ❤️ and lots of ☕</p>
-          </div>
-        </footer>
-      </div>
-    );
+          </Section>
+        </div>
+      );
+    };
 
     ReactDOM.render(<App />, document.getElementById('root'));
-  </script>
-</body>
-</html>
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
 </html>
