@@ -1,314 +1,824 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anurag Sharma | Portfolio</title>
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      transition: background-color 0.5s, color 0.5s;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anurag Sharma - AI & Quantum Researcher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=HK+Grotesk:wght@300;400;500;600;700&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Skip link for accessibility -->
+    <a href="#hero" class="skip-link">Skip to main content</a>
     
-    /* Light Mode */
-    .light {
-      --bg-start: #f3f4f6;
-      --bg-end: #e5e7eb;
-      --text-main: #1e293b;
-      --text-secondary: #475569;
-      --accent: #4f46e5;
-      --card-bg-start: rgba(255, 255, 255, 0.7);
-      --card-bg-end: rgba(255, 255, 255, 0.4);
-      --card-border: rgba(0, 0, 0, 0.1);
-      --glass-bg: rgba(255, 255, 255, 0.5);
-      --glass-border: rgba(0, 0, 0, 0.1);
-      --grid-color: rgba(0, 0, 0, 0.05);
-    }
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+      <span class="theme-icon">🌙</span>
+      <span class="theme-text">Dark</span>
+    </button>
 
-    /* Dark Mode */
-    .dark {
-      --bg-start: #0f172a;
-      --bg-end: #1e293b;
-      --text-main: #e2e8f0;
-      --text-secondary: #94a3b8;
-      --accent: #818cf8;
-      --card-bg-start: rgba(255, 255, 255, 0.07);
-      --card-bg-end: rgba(255, 255, 255, 0.03);
-      --card-border: rgba(255, 255, 255, 0.1);
-      --glass-bg: rgba(255, 255, 255, 0.1);
-      --glass-border: rgba(255, 255, 255, 0.2);
-      --grid-color: rgba(255, 255, 255, 0.05);
-    }
-    
-    body {
-      background-color: var(--bg-start);
-      background-image: 
-        linear-gradient(var(--grid-color) 1px, transparent 1px),
-        linear-gradient(to right, var(--grid-color) 1px, transparent 1px);
-      background-size: 40px 40px;
-      color: var(--text-main);
-    }
+    <!-- Fixed Floating Navigation -->
+    <nav class="floating-nav">
+      <div class="nav-pill">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#education" class="nav-link">Education</a>
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#research" class="nav-link">Research</a>
+        <a href="#achievements" class="nav-link">Achievements</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+    </nav>
 
-    .accent-text {
-      color: var(--accent);
-    }
-    
-    .accent-border {
-       border-color: var(--accent);
-    }
+    <!-- Hero Section with Portrait 3D Lanyard -->
+    <section id="hero" class="hero-section">
+      <canvas class="background-canvas" id="hero-bg-canvas"></canvas>
+      <!-- Preload hero image for better performance -->
+      <div class="container">
+        <div class="hero-content">
+          <div class="holographic-profile-card">
+            <div class="card-modes">
+              <button class="mode-btn active" data-mode="academic">
+                ACADEMIC
+              </button>
+              <button class="mode-btn" data-mode="research">RESEARCH</button>
+              <button class="mode-btn" data-mode="projects">PROJECTS</button>
+            </div>
 
-    .glass-effect {
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-    }
-    
-    .card-gradient {
-      background-image: linear-gradient(135deg, var(--card-bg-start), var(--card-bg-end));
-      border: 1px solid var(--card-border);
-    }
+            <div class="profile-avatar">
+              <img
+                src="assets/ANURAG_HERO.jpg"
+                alt="Anurag Sharma"
+                class="avatar-image"
+              />
+              <div class="avatar-glow"></div>
+            </div>
 
-    .nav-item:hover {
-      color: var(--accent);
-      transform: translateY(-2px);
-      transition: all 0.3s ease;
-    }
+            <div class="profile-info">
+              <h2 class="profile-name">Anurag Sharma</h2>
+              <p class="profile-title">AI & Quantum Researcher</p>
+            </div>
 
-    .card-content ul {
-      list-style-position: inside;
-      padding-left: 0;
-    }
-    .card-content li {
-      margin-bottom: 0.5rem;
-      color: var(--text-secondary);
-    }
-    .card-content li::before {
-        content: "•";
-        color: var(--accent);
-        font-weight: bold;
-        display: inline-block;
-        width: 1em;
-        margin-left: -1em;
-    }
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 28px;
-    }
-    .toggle-switch input { 
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 28px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 20px;
-      width: 20px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: var(--accent);
-    }
-    input:checked + .slider:before {
-      transform: translateX(22px);
-    }
-
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const { useEffect, useState } = React;
-
-    const ThemeToggle = ({ theme, toggleTheme }) => (
-      <label className="toggle-switch">
-        <input type="checkbox" onChange={toggleTheme} checked={theme === 'dark'} />
-        <span className="slider"></span>
-      </label>
-    );
-
-    const Navbar = ({ theme, toggleTheme }) => {
-      const [isScrolled, setIsScrolled] = useState(false);
-
-      useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 50);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-      }, []);
-      
-      const navItems = [
-        { name: 'Home', href: '#home' },
-        { name: 'Education', href: '#education' },
-        { name: 'Experience', href: '#experience' },
-        { name: 'Projects', href: '#projects' },
-        { name: 'Achievements', href: '#achievements' },
-        { name: 'Skills', href: '#skills' },
-        { name: 'Contact', href: '#contact' }
-      ];
-
-      return (
-        <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass-effect shadow-lg' : 'bg-transparent'}`}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <a href="#home" className="text-2xl font-bold accent-text">AS</a>
-              <div className="hidden md:flex items-center space-x-4">
-                {navItems.map((item) => (
-                  <a key={item.name} href={item.href} className="nav-item px-3 py-2 rounded-md text-sm font-medium transition-all duration-300" style={{color: 'var(--text-main)'}}>
-                    {item.name}
-                  </a>
-                ))}
-                <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+            <div class="card-content">
+              <div class="content-mode active" data-mode="academic">
+                <div class="info-row">
+                  <span class="label">University</span>
+                  <span class="value">RGIPT</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Specialization</span>
+                  <span class="value">Mathematics & Computing</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">DOB</span>
+                  <span class="value">6 May 2005</span>
+                </div>
               </div>
-              <div className="md:hidden flex items-center">
-                <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-                {/* Mobile menu button can be added here */}
+
+              <div class="content-mode" data-mode="research">
+                <div class="info-row">
+                  <span class="label">Focus Areas</span>
+                  <span class="value">AI & Quantum ML</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Publications</span>
+                  <span class="value">4 Research Papers</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Organization</span>
+                  <span class="value">UncertaintyWorks</span>
+                </div>
+              </div>
+
+              <div class="content-mode" data-mode="projects">
+                <div class="info-row">
+                  <span class="label">Active Projects</span>
+                  <span class="value">15+ Innovations</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Experience</span>
+                  <span class="value">Ex-Intern IIT Ropar</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Membership</span>
+                  <span class="value">Student Member EAGE</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="particle-effects">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </div>
+          <div class="hero-text">
+            <h1 class="hero-title">Anurag Sharma</h1>
+            <p class="hero-subtitle">AI & Quantum Researcher</p>
+            <p class="hero-description">
+              B.Tech Mathematics & Computing @ RGIPT | CS Minor @ IIT Mandi
+            </p>
+            <div class="hero-stats">
+              <div class="stat-item">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">Projects</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">6</span>
+                <span class="stat-label">Awards</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">4</span>
+                <span class="stat-label">Publications</span>
+              </div>
+            </div>
+            <div class="hero-actions">
+              <a
+                href="https://github.com/anurag-sharma"
+                target="_blank"
+                class="btn btn--primary"
+              >
+                <span>GitHub</span>
+              </a>
+              <a
+                href="https://linkedin.com/in/anurag-sharma"
+                target="_blank"
+                class="btn btn--secondary"
+              >
+                <span>LinkedIn</span>
+              </a>
+              <a
+                href="mailto:anuragmessi5@gmail.com"
+                class="btn btn--secondary"
+              >
+                <span>Contact</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Education Timeline with Complete History -->
+    <section id="education" class="section">
+      <canvas class="background-canvas" id="education-bg-canvas"></canvas>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title enhanced-title">Education Journey</h2>
+          <div class="title-bg-effect"></div>
+          <div class="title-underline"></div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item animate-on-scroll" data-delay="0.1">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-background-image" style="background-image: url('assets/rajiv_bg.jpg');">
+                <!-- Background image area for institute imagery -->
+              </div>
+              <div class="timeline-content-wrapper">
+                <div class="timeline-logo-placeholder">
+                  <img src="assets/RGIPT Logo (1).png" alt="RGIPT Logo" class="timeline-logo-img">
+                </div>
+                <div class="timeline-content-inner">
+                  <div class="timeline-header">
+                    <h3>Bachelor of Technology in Mathematics and Computing</h3>
+                    <span class="timeline-year">2024-2028</span>
+                  </div>
+                  <p class="timeline-institution">
+                    Rajiv Gandhi Institute of Petroleum Technology
+                  </p>
+                  <p class="timeline-location">Jais, UP, India</p>
+                  <p class="timeline-status current">Current - 2nd Year</p>
+                  <p class="timeline-description">
+                    Comprehensive program combining mathematical foundations with
+                    computational applications
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </nav>
-      );
-    };
 
-    const Typewriter = ({ text, speed = 100 }) => {
-      const [displayed, setDisplayed] = useState("");
-      useEffect(() => {
-        let i = 0;
-        const interval = setInterval(() => {
-          setDisplayed(text.slice(0, ++i));
-          if (i === text.length) clearInterval(interval);
-        }, speed);
-        return () => clearInterval(interval);
-      }, [text, speed]);
-      return <h1 className="text-4xl md:text-6xl font-bold accent-text">{displayed}</h1>;
-    };
-
-    const Card = ({ title, content, icon }) => (
-      <div className="card-gradient rounded-xl shadow-xl p-6 hover:shadow-2xl hover:scale-105 transition-all duration-300 h-full">
-        <h3 className="text-xl font-semibold accent-text mb-3">{icon} {title}</h3>
-        <div className="text-sm leading-relaxed card-content">{content}</div>
-      </div>
-    );
-
-    const Section = ({ title, children, id }) => (
-      <section id={id} className="max-w-6xl mx-auto py-16 px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 relative" style={{color: 'var(--text-main)'}}>
-          {title}
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent mt-4"></div>
-        </h2>
-        {children}
-      </section>
-    );
-
-    const App = () => {
-      const [theme, setTheme] = useState('dark');
-      
-      useEffect(() => {
-        document.body.className = theme;
-      }, [theme]);
-      
-      const toggleTheme = () => {
-        setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-      };
-
-      return (
-        <div className="min-h-screen">
-          <Navbar theme={theme} toggleTheme={toggleTheme} />
-          
-          <header id="home" className="text-center min-h-screen flex flex-col justify-center items-center px-6">
-            <div className="relative">
-              <img
-                src="1752940952309.jpeg"
-                alt="Anurag Sharma"
-                className="w-48 h-48 rounded-full mx-auto border-4 accent-border shadow-2xl mb-8 object-cover hover:scale-110 transition-transform duration-300"
-              />
-            </div>
-            <p className="text-xl mb-6 font-light" style={{color: 'var(--text-secondary)'}}>👋 Hi there, I'm</p>
-            <Typewriter text="Anurag Sharma" />
-            <p className="mt-6 text-lg max-w-2xl mx-auto leading-relaxed" style={{color: 'var(--text-secondary)'}}>
-              AI & Quantum Researcher | B.Tech @ RGIPT | CS Minor @ IIT Mandi
-            </p>
-          </header>
-
-          <Section title="Education" id="education">
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card title="B.Tech in Mathematics & Computing" content={<ul><li>Rajiv Gandhi Institute of Petroleum Technology</li></ul>} />
-              <Card title="Minor in Computer Science & Advanced Technologies" content={<ul><li>Indian Institute of Technology Mandi</li></ul>} />
-            </div>
-          </Section>
-
-          <Section title="Experience" id="experience">
-            <div className="grid md:grid-cols-3 gap-8">
-              <Card title="AI Intern @ Annam.AI" content={<ul><li>Internship at IIT Ropar (June-July 2025)</li><li>Built flood damage classification pipeline</li><li>Developed NDVI-based super-resolution models</li><li>Tech: PyTorch, FastAPI, Docker</li></ul>} />
-              <Card title="AI Research Intern @ Prodigal AI" content={<ul><li>Internship since July 2025</li><li>Research on SLMs, RAG, and multimodal learning</li><li>Focus on interpretability and agentic reasoning</li></ul>} />
-              <Card title="Mentee @ sktime" content={<ul><li>Open-source contributions since July 2025</li><li>Improved white noise augmentation for pandas input</li><li>Mentored by sktime maintainers</li></ul>} />
-            </div>
-          </Section>
-
-          <Section title="Featured Projects" id="projects">
-             <div className="grid md:grid-cols-3 gap-8">
-              <Card title="⚛️ Quantum Sentinel" content={<ul><li>Quantum-assisted fraud detection</li><li>Tech: PennyLane, Cirq, Streamlit</li><li>Status: Active</li></ul>} />
-              <Card title="⏱️ ChronoQNN" content={<ul><li>Quantum Neural Networks for time series</li><li>Tech: PyTorch, PennyLane</li><li>Status: Beta</li></ul>} />
-              <Card title="🔥 Fire Sentinel" content={<ul><li>Forest fire risk and spread simulation</li><li>Tech: U-Net, CA, ERA5, Streamlit</li><li>Status: Live</li></ul>} />
-            </div>
-          </Section>
-
-          <Section title="Achievements" id="achievements">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <Card title="🥇 Winner" content={<ul><li>IEEE Data Viz Challenge</li><li>Team Leader for visual AI storytelling</li></ul>} />
-                <Card title="🥈 Runner-up" content={<ul><li>Yuri Night 2025 @ IIT BHU</li><li>Team Leader for NASA asteroid classifier</li></ul>} />
-                <Card title="🏅 Top 5%" content={<ul><li>CeNSE Winter School @ IISc</li><li>Certificate of Distinction in semiconductor tech</li></ul>} />
-                <Card title="🧑‍💻 Best Newbie" content={<ul><li>Hackmatrix 2025 @ IIT Patna</li><li>1st year innovation award in finals</li></ul>} />
-            </div>
-          </Section>
-          
-          <Section title="Skills & Stack" id="skills">
-            <div className="grid md:grid-cols-3 gap-8">
-              <Card title="Languages & Frameworks" content={<ul><li>Python</li><li>Rust</li><li>SQL</li><li>C++</li><li>FastAPI</li></ul>} />
-              <Card title="AI & Quantum Stack" content={<ul><li>PyTorch</li><li>TensorFlow</li><li>Scikit-learn</li><li>PennyLane</li><li>Hugging Face</li></ul>} />
-              <Card title="Data, Web & UI" content={<ul><li>Streamlit</li><li>Docker</li><li>PostgreSQL</li><li>Redis</li><li>Geospatial Tools</li></ul>} />
-            </div>
-          </Section>
-
-          <Section title="Contact" id="contact">
-            <div className="text-center max-w-lg mx-auto">
-              <p className="mb-8 text-lg" style={{color: 'var(--text-secondary)'}}>I'm always open to collaborating on innovative projects. Let's connect!</p>
-              <div className="flex justify-center space-x-6">
-                <a href="mailto:anuragmessi5@gmail.com" className="text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform duration-300" style={{backgroundColor: 'var(--accent)'}}>Email Me</a>
-                <a href="https://www.linkedin.com/in/anurag-sharma-362664240/" target="_blank" className="border-2 accent-border px-8 py-3 rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-300" style={{color: 'var(--text-main)'}}>LinkedIn</a>
-                <a href="https://github.com/silverballz" target="_blank" className="border-2 accent-border px-8 py-3 rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-300" style={{color: 'var(--text-main)'}}>GitHub</a>
+          <div class="timeline-item animate-on-scroll" data-delay="0.2">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-background-image" style="background-image: url('assets/mandi_bg.jpg');">
+                <!-- Background image area for institute imagery -->
+              </div>
+              <div class="timeline-content-wrapper">
+                <div class="timeline-logo-placeholder">
+                  <img src="assets/mandi_logo.jpg" alt="IIT Mandi Logo" class="timeline-logo-img">
+                </div>
+                <div class="timeline-content-inner">
+                  <div class="timeline-header">
+                    <h3>Minor in Computer Science and Engineering</h3>
+                    <span class="timeline-year">2024-2025</span>
+                  </div>
+                  <p class="timeline-institution">
+                    Indian Institute of Technology Mandi
+                  </p>
+                  <p class="timeline-location">Remote</p>
+                  <p class="timeline-status current">Current</p>
+                  <p class="timeline-description">
+                    Advanced computer science concepts and engineering applications
+                  </p>
+                </div>
               </div>
             </div>
-          </Section>
-        </div>
-      );
-    };
+          </div>
 
-    ReactDOM.render(<App />, document.getElementById('root'));
-  </script>
-</body>
+          <div class="timeline-item animate-on-scroll" data-delay="0.3">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-background-image" style="background-image: url('assets/nalanda_bg.jpeg');">
+                <!-- Background image area for institute imagery -->
+              </div>
+              <div class="timeline-content-wrapper">
+                <div class="timeline-logo-placeholder">
+                  <img src="assets/nalanda_logo.png" alt="Nalanda Academy Logo" class="timeline-logo-img">
+                </div>
+                <div class="timeline-content-inner">
+                  <div class="timeline-header">
+                    <h3>12th Standard - PCM Stream CBSE</h3>
+                    <span class="timeline-year">2021-2023</span>
+                  </div>
+                  <p class="timeline-institution">Nalanda Academy Sr Sec School</p>
+                  <p class="timeline-location">Kota, Rajasthan</p>
+                  <p class="timeline-status completed">Completed</p>
+                  <p class="timeline-description">
+                    Higher secondary education in Physics, Chemistry, Mathematics
+                    stream preparing for engineering entrance
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item animate-on-scroll" data-delay="0.4">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-background-image" style="background-image: url('assets/stpaul_bg.jpeg');">
+                <!-- Background image area for institute imagery -->
+              </div>
+              <div class="timeline-content-wrapper">
+                <div class="timeline-logo-placeholder">
+                  <img src="assets/STPAULSLOGO.jpg" alt="St Paul's School Logo" class="timeline-logo-img">
+                </div>
+                <div class="timeline-content-inner">
+                  <div class="timeline-header">
+                    <h3>Till 10th Standard CBSE</h3>
+                    <span class="timeline-year">2009-2021</span>
+                  </div>
+                  <p class="timeline-institution">
+                    St Paul's Senior Secondary School
+                  </p>
+                  <p class="timeline-location">Banswara, Rajasthan</p>
+                  <p class="timeline-status completed">Completed</p>
+                  <p class="timeline-description">
+                    Foundation education with strong academic performance in CBSE
+                    curriculum
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Experience Timeline with Logo Placeholders -->
+    <section id="experience" class="section">
+      <canvas class="background-canvas" id="experience-bg-canvas"></canvas>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title enhanced-title">Professional Experience</h2>
+          <div class="title-bg-effect"></div>
+          <div class="title-underline"></div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item animate-on-scroll" data-delay="0.1">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-background-image" style="background-image: url('assets/eage_bg.jpg');">
+                <!-- Background image area for organization imagery -->
+              </div>
+              <div class="timeline-content-wrapper">
+                <div class="timeline-logo-placeholder">
+                  <img src="assets/eage_logo.png" alt="EAGE Logo" class="timeline-logo-img">
+                </div>
+                <div class="timeline-content-inner">
+                  <div class="timeline-header">
+                    <h3>Student Member</h3>
+                    <span class="timeline-year">Oct 2025 - Present</span>
+                  </div>
+                  <p class="timeline-institution">
+                    EAGE (European Association of Geoscientists & Engineers)
+                  </p>
+                  <p class="timeline-location">Netherlands</p>
+                  <div class="timeline-highlights">
+                    <div class="highlight">
+                      AI Community Membership: Active member focusing on geoscience
+                      applications
+                    </div>
+                    <div class="highlight">
+                      Conference Delegate: Student Delegate for EAGE/FESM Joint
+                      Conference 2025, Kuala Lumpur
+                    </div>
+                    <div class="highlight">
+                      Sponsored Student Member status recognizing academic
+                      excellence
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item animate-on-scroll" data-delay="0.2">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-background-image" style="background-image: url('assets/ropar_bg.jpeg');">
+                <!-- Background image area for organization imagery -->
+              </div>
+              <div class="timeline-content-wrapper">
+                <div class="timeline-logo-placeholder">
+                  <img src="assets/ropar_logo.jpg" alt="IIT Ropar Logo" class="timeline-logo-img">
+                </div>
+                <div class="timeline-content-inner">
+                  <div class="timeline-header">
+                    <h3>Research Intern</h3>
+                    <span class="timeline-year">May 2025 - Jul 2025</span>
+                  </div>
+                  <p class="timeline-institution">
+                    Indian Institute of Technology Ropar (IIT Ropar)
+                  </p>
+                  <p class="timeline-location">On-site</p>
+                  <div class="timeline-highlights">
+                    <div class="highlight">
+                      Developed FloodNet pipeline using Sentinel-2 and PlanetScope
+                      for flood-affected cropland analysis
+                    </div>
+                    <div class="highlight">
+                      Built EDSR and RCAN models enhancing NDVI resolution from 10m
+                      to 3m
+                    </div>
+                    <div class="highlight">
+                      Enabled precise crop-damage mapping for agricultural recovery
+                      decisions
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item animate-on-scroll" data-delay="0.3">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-background-image" style="background-image: url('assets/prodigal_bg.png');">
+                <!-- Background image area for organization imagery -->
+              </div>
+              <div class="timeline-content-wrapper">
+                <div class="timeline-logo-placeholder">
+                  <img src="assets/prodigal_ai_logo (1).jpeg" alt="Prodigal AI Logo" class="timeline-logo-img">
+                </div>
+                <div class="timeline-content-inner">
+                  <div class="timeline-header">
+                    <h3>Research Intern</h3>
+                    <span class="timeline-year">Jul 2025 - Aug 2025</span>
+                  </div>
+                  <p class="timeline-institution">Prodigal AI</p>
+                  <p class="timeline-location">Remote</p>
+                  <div class="timeline-highlights">
+                    <div class="highlight">
+                      Engineered SLM training pipelines with advanced distillation
+                      and quantization
+                    </div>
+                    <div class="highlight">
+                      Authored comprehensive AI/ML workflows documentation
+                    </div>
+                    <div class="highlight">
+                      Reduced model latency by 30% through optimized workflows
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item animate-on-scroll" data-delay="0.4">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-background-image" style="background-image: url('assets/energy_bg.jpg');">
+                <!-- Background image area for organization imagery -->
+              </div>
+              <div class="timeline-content-wrapper">
+                <div class="timeline-logo-placeholder">
+                  <img src="assets/RGIPT Logo (1).png" alt="RGIPT Energy Department Logo" class="timeline-logo-img">
+                </div>
+                <div class="timeline-content-inner">
+                  <div class="timeline-header">
+                    <h3>Project Intern</h3>
+                    <span class="timeline-year">Jan 2025 - Feb 2025</span>
+                  </div>
+                  <p class="timeline-institution">Department of Energy, RGIPT</p>
+                  <p class="timeline-location">On-site</p>
+                  <div class="timeline-highlights">
+                    <div class="highlight">
+                      Fabricated working models for India Energy Week (IEW) 2025
+                    </div>
+                    <div class="highlight">
+                      Collaborated with Numaligarh Refinery Limited (NRL) on energy
+                      R&D projects
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Projects Section -->
+    <section id="projects" class="section">
+      <canvas class="background-canvas" id="projects-bg-canvas"></canvas>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title enhanced-title">Featured Projects</h2>
+          <div class="title-bg-effect"></div>
+          <div class="title-underline"></div>
+        </div>
+        <div class="projects-grid">
+          <div class="project-card featured animate-on-scroll">
+            <div class="project-glow"></div>
+            <div class="project-header">
+              <h3 class="project-title">AgriFlux</h3>
+              <div class="project-status active">Active</div>
+            </div>
+            <p class="project-description">
+              Satellite-Based Agriculture Monitoring system integrating FloodNet
+              super-resolution technology
+            </p>
+            <div class="project-tech">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">PyTorch</span>
+              <span class="tech-tag">EDSR</span>
+              <span class="tech-tag">RCAN</span>
+              <span class="tech-tag">Sentinel-2</span>
+            </div>
+            <div class="project-category">AI/Remote Sensing</div>
+          </div>
+
+          <div class="project-card featured animate-on-scroll">
+            <div class="project-glow"></div>
+            <div class="project-header">
+              <h3 class="project-title">FracTek</h3>
+              <div class="project-status published">Published</div>
+            </div>
+            <p class="project-description">
+              Comprehensive Fractal Library with 15+ fractal families including
+              Mandelbrot, Julia, Koch, Sierpinski
+            </p>
+            <div class="project-tech">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">NumPy</span>
+              <span class="tech-tag">Mathematical Modeling</span>
+              <span class="tech-tag">Visualization</span>
+            </div>
+            <div class="project-category">Mathematical Library</div>
+          </div>
+
+          <div class="project-card animate-on-scroll">
+            <div class="project-glow"></div>
+            <div class="project-header">
+              <h3 class="project-title">Quantum Sentinel</h3>
+              <div class="project-status active">Active</div>
+            </div>
+            <p class="project-description">
+              Quantum Machine Learning fraud detection system using Variational
+              Quantum Classifier
+            </p>
+            <div class="project-tech">
+              <span class="tech-tag">Cirq</span>
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">SMOTE</span>
+              <span class="tech-tag">Quantum ML</span>
+            </div>
+            <div class="project-category">Quantum ML</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Research Section -->
+    <section id="research" class="section">
+      <canvas class="background-canvas" id="research-bg-canvas"></canvas>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title enhanced-title">Research & Publications</h2>
+          <div class="title-bg-effect"></div>
+          <div class="title-underline"></div>
+        </div>
+        <div class="research-grid">
+          <div class="research-card animate-on-scroll">
+            <div class="research-glow"></div>
+            <div class="research-header">
+              <h3 class="research-title">
+                UncertaintyWorks - Open Source Research Organization
+              </h3>
+              <div class="research-status ongoing">Ongoing</div>
+            </div>
+            <p class="research-role">Founder & Lead Researcher</p>
+            <p class="research-duration">Aug 2025 - Present</p>
+            <div class="research-areas">
+              <span class="area-tag">Fractal Geometry</span>
+              <span class="area-tag">Topological Data Analysis</span>
+              <span class="area-tag">Quantum ML</span>
+              <span class="area-tag">Homomorphic Encryption</span>
+            </div>
+            <div class="research-publications">
+              <div class="publication">
+                FracTek Library - ICMC 2026: Provisionally accepted for Springer
+                CCIS
+              </div>
+            </div>
+          </div>
+
+          <div class="research-card animate-on-scroll">
+            <div class="research-glow"></div>
+            <div class="research-header">
+              <h3 class="research-title">Geospatial Intelligence Research</h3>
+              <div class="research-status active">Active</div>
+            </div>
+            <p class="research-role">Research Collaborator - IIT Ropar</p>
+            <p class="research-duration">May 2025 - Present</p>
+            <div class="research-areas">
+              <span class="area-tag">Computer Vision</span>
+              <span class="area-tag">Remote Sensing</span>
+              <span class="area-tag">Agricultural AI</span>
+            </div>
+            <div class="research-publications">
+              <div class="publication">
+                CVIP 2025: FloodNet super-resolution research provisionally
+                accepted
+              </div>
+            </div>
+          </div>
+
+          <div class="research-card animate-on-scroll">
+            <div class="research-glow"></div>
+            <div class="research-header">
+              <h3 class="research-title">Generative AI in Geosciences</h3>
+              <div class="research-status research">Research</div>
+            </div>
+            <p class="research-role">Independent Researcher</p>
+            <p class="research-duration">Sep 2025 - Present</p>
+            <div class="research-areas">
+              <span class="area-tag">GANs</span>
+              <span class="area-tag">Physics-Informed Neural Networks</span>
+              <span class="area-tag">Geological Data Analysis</span>
+            </div>
+            <div class="research-publications">
+              <div class="publication">
+                EAGE Conference 2025: GAN-based geological data generation
+                accepted
+              </div>
+              <div class="publication">
+                ICPHD 2025: PINN research accepted for oral presentation
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Achievements Section -->
+    <section id="achievements" class="section achievements-section">
+      <canvas class="background-canvas" id="achievements-bg-canvas"></canvas>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title enhanced-title">Achievements & Awards</h2>
+          <div class="title-bg-effect"></div>
+          <div class="title-underline"></div>
+        </div>
+
+        <div class="achievements-showcase">
+          <div
+            class="achievement-trophy animate-on-scroll"
+            data-achievement="hackmatrix"
+          >
+            <div class="trophy-icon">🏆</div>
+            <div class="trophy-glow"></div>
+            <div class="achievement-content">
+              <h3>IIT Patna NJACK Hackmatrix 2025</h3>
+              <p class="achievement-award">
+                Track Winners - Best Innovation Award
+              </p>
+              <p class="achievement-desc">
+                Outstanding innovation in hackathon competition
+              </p>
+            </div>
+            <div class="achievement-year">2025</div>
+          </div>
+
+          <div
+            class="achievement-trophy animate-on-scroll"
+            data-achievement="planet-hunt"
+          >
+            <div class="trophy-icon">🚀</div>
+            <div class="trophy-glow"></div>
+            <div class="achievement-content">
+              <h3>IIT (BHU) Planet Hunt ML Challenge 2025</h3>
+              <p class="achievement-award">Runner-up - Asteroid Classifier</p>
+              <p class="achievement-desc">
+                Machine learning techniques for space applications
+              </p>
+            </div>
+            <div class="achievement-year">2025</div>
+          </div>
+
+          <div
+            class="achievement-trophy animate-on-scroll"
+            data-achievement="iisc-winter"
+          >
+            <div class="trophy-icon">🎓</div>
+            <div class="trophy-glow"></div>
+            <div class="achievement-content">
+              <h3>IISc CeNSE Winter School</h3>
+              <p class="achievement-award">Certificate of Distinction</p>
+              <p class="achievement-desc">
+                Outstanding performance in advanced semiconductor physics
+              </p>
+            </div>
+            <div class="achievement-year">2025</div>
+          </div>
+
+          <div
+            class="achievement-trophy animate-on-scroll"
+            data-achievement="ieee-viz"
+          >
+            <div class="trophy-icon">📊</div>
+            <div class="trophy-glow"></div>
+            <div class="achievement-content">
+              <h3>IEEE RGIPT Data Visualization 2024</h3>
+              <p class="achievement-award">Winner and Team Leader</p>
+              <p class="achievement-desc">
+                Excellence in data visualization and presentation
+              </p>
+            </div>
+            <div class="achievement-year">2024</div>
+          </div>
+
+          <div
+            class="achievement-trophy animate-on-scroll"
+            data-achievement="iit-quant"
+          >
+            <div class="trophy-icon">📈</div>
+            <div class="trophy-glow"></div>
+            <div class="achievement-content">
+              <h3>IIT KGP Summer of Quant 2025</h3>
+              <p class="achievement-award">Certificate of Merit</p>
+              <p class="achievement-desc">
+                Quantitative finance and mathematical modeling
+              </p>
+            </div>
+            <div class="achievement-year">2025</div>
+          </div>
+
+          <div
+            class="achievement-trophy animate-on-scroll"
+            data-achievement="urjotsav"
+          >
+            <div class="trophy-icon">🌐</div>
+            <div class="trophy-glow"></div>
+            <div class="achievement-content">
+              <h3>Urjotsav TechFest 2024</h3>
+              <p class="achievement-award">
+                Runner-up - MUN on Global AI Ethics
+              </p>
+              <p class="achievement-desc">
+                Model United Nations on AI ethics and policy
+              </p>
+            </div>
+            <div class="achievement-year">2024</div>
+          </div>
+        </div>
+
+        <div class="achievements-stats">
+          <div class="achievement-stat">
+            <div class="stat-number" data-target="6">0</div>
+            <div class="stat-label">Major Awards</div>
+          </div>
+          <div class="achievement-stat">
+            <div class="stat-number" data-target="15">0</div>
+            <div class="stat-label">Active Projects</div>
+          </div>
+          <div class="achievement-stat">
+            <div class="stat-number" data-target="4">0</div>
+            <div class="stat-label">Publications</div>
+          </div>
+          <div class="achievement-stat">
+            <div class="stat-number" data-target="3">0</div>
+            <div class="stat-label">Research Areas</div>
+          </div>
+        </div>
+
+        <div class="leadership-section">
+          <h3 class="leadership-title enhanced-subtitle">
+            Leadership Positions
+          </h3>
+          <div class="leadership-grid">
+            <div class="leadership-card animate-on-scroll">
+              <div class="leadership-icon">🎭</div>
+              <h4>Speaking Arts Head</h4>
+              <p class="leadership-org">Student Cultural Council, RGIPT</p>
+              <p class="leadership-duration">2025 - 2026</p>
+              <p class="leadership-desc">
+                Leading Speaking Arts division organizing debates, public
+                speaking events, and cultural festivals
+              </p>
+            </div>
+            <div class="leadership-card animate-on-scroll">
+              <div class="leadership-icon">🎨</div>
+              <h4>Design Executive</h4>
+              <p class="leadership-org">Student Council, RGIPT</p>
+              <p class="leadership-duration">Jan 2025 - May 2025</p>
+              <p class="leadership-desc">
+                Multi-Festival Design Lead for KALTARANG Cultural Fest, ENERGIA
+                Sports Fest, and IEEE technical events
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Contact Section -->
+    <section id="contact" class="section">
+      <canvas class="background-canvas" id="contact-bg-canvas"></canvas>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title enhanced-title">Get In Touch</h2>
+          <div class="title-bg-effect"></div>
+          <div class="title-underline"></div>
+        </div>
+        <div class="contact-content">
+          <div class="contact-info animate-on-scroll">
+            <h3>Let's Connect</h3>
+            <p>
+              Interested in collaborating on AI research, quantum computing, or
+              mathematical modeling projects? I'd love to hear from you!
+            </p>
+            <div class="contact-details">
+              <div class="contact-item">
+                <span class="contact-label">Email:</span>
+                <a href="mailto:anuragmessi5@gmail.com"
+                  >anuragmessi5@gmail.com</a
+                >
+              </div>
+              <div class="contact-item">
+                <span class="contact-label">Alt Email:</span>
+                <a href="mailto:24mc3008@rgipt.ac.in">24mc3008@rgipt.ac.in</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-label">Phone:</span>
+                <span>+91-89054-74391</span>
+              </div>
+            </div>
+            <div class="contact-links">
+              <a href="mailto:anuragmessi5@gmail.com" class="btn btn--primary">
+                <span>Email Me</span>
+              </a>
+              <a
+                href="https://linkedin.com/in/anurag-sharma"
+                target="_blank"
+                class="btn btn--secondary"
+              >
+                <span>LinkedIn</span>
+              </a>
+              <a
+                href="https://github.com/anurag-sharma"
+                target="_blank"
+                class="btn btn--secondary"
+              >
+                <span>GitHub</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
 </html>
